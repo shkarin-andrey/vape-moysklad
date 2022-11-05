@@ -2,14 +2,14 @@ import { TableData } from "./TableProfit.interface";
 
 export const createData = (
   name: string,
-  current: number,
+  sum: number,
   fat: number,
   margin: number,
   protein: number
 ): TableData => {
   return {
     name,
-    current,
+    sum,
     fat,
     margin,
     protein,
