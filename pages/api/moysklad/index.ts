@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getEndMonth, getStartMonth } from "../../../services/moment";
 import { msContragents, msProfit } from "../../../services/moyskald";
 
 const mergeByProperty = (arrays: any[], property: string) => {
@@ -22,11 +23,17 @@ export default async function handler(
 ) {
   try {
     const contragents = await msContragents();
-    const profit = await msProfit();
+    const profit = await msProfit(getStartMonth(0), getEndMonth(0));
 
     const data = mergeByProperty([contragents, profit], "name");
 
-    res.status(200).json(data);
+    const allSum = data.reduce((previousValue: number, currentValue: any) => {
+      return previousValue + currentValue.sum;
+    }, 0);
+
+    const totalSum = new Intl.NumberFormat("ru-RU").format(allSum);
+
+    res.status(200).json({ data, totalSum });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }

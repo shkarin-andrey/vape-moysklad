@@ -1,11 +1,11 @@
+import { FC } from "react";
 import Layout from "../components/Layout";
 import TableProfit from "../components/TableProfit";
-import { createData } from "../components/TableProfit/TableProfit.services";
 import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
-export default function Home() {
-  const [data, setData] = useState(null);
+const Home: FC = () => {
+  const [data = [], setData] = useState<any>([]);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,8 +18,6 @@ export default function Home() {
       });
   }, []);
 
-  console.log(data);
-
   return (
     <Layout>
       {isLoading && (
@@ -27,7 +25,17 @@ export default function Home() {
           <CircularProgress />
         </div>
       )}
-      {data && <TableProfit rows={data} />}
+      {data && data.totalSum && (
+        <div className="mb-5 flex item-center gap-3">
+          <div className="text-xl text-gray-600 text-medium">
+            В этом месяце продано на:
+          </div>
+          <div className="font-bold text-2xl">{data.totalSum}₽</div>
+        </div>
+      )}
+      {data && data.data && <TableProfit rows={data.data} />}
     </Layout>
   );
-}
+};
+
+export default Home;

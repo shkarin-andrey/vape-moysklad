@@ -1,6 +1,10 @@
-import { Drawer, IconButton } from "@mui/material";
+import {
+  Drawer,
+  IconButton,
+} from "@mui/material";
 import React, { FC, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import Navigation from "./../../Navigation";
 
 const Header: FC = () => {
   const [anchor, setAnchor] = useState(false);
@@ -12,7 +16,7 @@ const Header: FC = () => {
         <MenuIcon className="text-white" />
       </IconButton>
       <Drawer anchor={"left"} open={anchor} onClose={() => setAnchor(false)}>
-        <h1> hello</h1>
+        <Navigation setAnchor={setAnchor} />
       </Drawer>
     </div>
   );

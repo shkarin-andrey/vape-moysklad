@@ -4,8 +4,7 @@ import msContragents from "./msContragents";
 import msProfit from "./msProfit";
 
 const ms = Moysklad({
-  login: process.env.MOYSKLAD_LOGIN,
-  password: process.env.MOYSKLAD_PASSWORD,
+  token: process.env.MOYSKLAD_TOKEN,
   apiVersion: "1.2",
 });
 

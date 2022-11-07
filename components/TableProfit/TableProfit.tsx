@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { TableBody, Box, Table } from "@mui/material";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -13,6 +13,7 @@ import { visuallyHidden } from "@mui/utils";
 import { TableData } from "./TableProfit.interface";
 import { createData } from "./TableProfit.services";
 import { headCells } from "./TableProfit.config";
+import useNumberFormat from "./../../hooks/useNumberFormat";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -116,10 +117,12 @@ function EnhancedTableToolbar() {
 }
 
 const TableProfit: FC<any> = ({ rows }) => {
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof TableData>("margin");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<keyof TableData>("name");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+
+  const numberFormat = useNumberFormat();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -167,9 +170,7 @@ const TableProfit: FC<any> = ({ rows }) => {
                     <TableRow hover tabIndex={-1} key={row.name}>
                       <TableCell scope="row">{row.name}</TableCell>
                       <TableCell align="right">
-                        {new Intl.NumberFormat("ru-RU").format(
-                          Number(row.sum) || 0
-                        )}
+                        {numberFormat(Number(row.sum) || 0)}
                       </TableCell>
                       <TableCell align="right">{row.fat}</TableCell>
                       <TableCell align="right">{row.margin || 0}</TableCell>

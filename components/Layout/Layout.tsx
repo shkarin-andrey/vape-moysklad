@@ -1,9 +1,6 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import Header from "./Header";
-
-interface ILayout {
-  children: ReactNode;
-}
+import { ILayout } from "./Layout.interface";
 
 const Layout: FC<ILayout> = ({ children }) => {
   return (
