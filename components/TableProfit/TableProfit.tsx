@@ -1,19 +1,18 @@
-import React, { FC, useState } from "react";
-import { TableBody, Box, Table } from "@mui/material";
+// @ts-nocheck
+import { Box, Table, TableBody } from "@mui/material";
+import Paper from "@mui/material/Paper";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import { TableData } from "./TableProfit.interface";
-import { createData } from "./TableProfit.services";
-import { headCells } from "./TableProfit.config";
+import React, { FC, useState } from "react";
+import { IMoySklad } from "../../util/interfaces/moysklad.interface";
 import useNumberFormat from "./../../hooks/useNumberFormat";
+import { headCells } from "./TableProfit.config";
+import { Order, TMoySklad } from "./TableProfit.interface";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -24,8 +23,6 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   }
   return 0;
 }
-
-type Order = "asc" | "desc";
 
 function getComparator<Key extends keyof any>(
   order: Order,
@@ -39,12 +36,7 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
+function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -59,7 +51,7 @@ function stableSort<T>(
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof TableData
+    property: TMoySklad
   ) => void;
   order: Order;
   orderBy: string;
@@ -69,7 +61,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
-    (property: keyof TableData) => (event: React.MouseEvent<unknown>) => {
+    (property: TMoySklad) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -101,32 +93,19 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-function EnhancedTableToolbar() {
-  return (
-    <Toolbar>
-      <Typography
-        sx={{ flex: "1 1 100%" }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
-        Прибыльность
-      </Typography>
-    </Toolbar>
-  );
-}
-
-const TableProfit: FC<any> = ({ rows }) => {
+const TableProfit: FC<{ rows: IMoySklad[] }> = ({ rows }) => {
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<keyof TableData>("name");
+  const [orderBy, setOrderBy] = useState<TMoySklad>("name");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
+
+  console.log();
 
   const numberFormat = useNumberFormat();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof TableData
+    property: TMoySklad
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -144,14 +123,12 @@ const TableProfit: FC<any> = ({ rows }) => {
     setPage(0);
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -161,8 +138,6 @@ const TableProfit: FC<any> = ({ rows }) => {
               rowCount={rows.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.sort(getComparator(order, orderBy)).slice() */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
@@ -170,11 +145,24 @@ const TableProfit: FC<any> = ({ rows }) => {
                     <TableRow hover tabIndex={-1} key={row.name}>
                       <TableCell scope="row">{row.name}</TableCell>
                       <TableCell align="right">
-                        {numberFormat(Number(row.sum) || 0)}
+                        {numberFormat(row.month5?.sum) || 0}
                       </TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.margin || 0}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">
+                        {numberFormat(row.month4?.sum) || 0}
+                      </TableCell>
+                      <TableCell align="right">
+                        {numberFormat(row.month3?.sum) || 0}
+                      </TableCell>
+                      <TableCell align="right">
+                        {numberFormat(row.month2?.sum) || 0}
+                      </TableCell>
+                      <TableCell align="right">
+                        {numberFormat(row.month1?.sum) || 0}
+                      </TableCell>
+                      <TableCell align="right">
+                        {numberFormat(row.month0?.sum) || 0}
+                      </TableCell>
+                      <TableCell align="right">{row.month0?.margin}</TableCell>
                     </TableRow>
                   );
                 })}

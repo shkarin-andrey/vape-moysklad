@@ -9,9 +9,36 @@ const msContragents = async () => {
       salesAmount: item.salesAmount,
       updated: item.updated,
       created: item.created,
-      sum: 0,
-      profit: 0,
-      margin: 0,
+      month0: {
+        sum: 0,
+        profit: 0,
+        margin: 0,
+      },
+      month1: {
+        sum: 0,
+        profit: 0,
+        margin: 0,
+      },
+      month2: {
+        sum: 0,
+        profit: 0,
+        margin: 0,
+      },
+      month3: {
+        sum: 0,
+        profit: 0,
+        margin: 0,
+      },
+      month4: {
+        sum: 0,
+        profit: 0,
+        margin: 0,
+      },
+      month5: {
+        sum: 0,
+        profit: 0,
+        margin: 0,
+      },
     };
   });
 

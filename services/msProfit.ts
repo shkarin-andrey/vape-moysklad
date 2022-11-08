@@ -1,11 +1,10 @@
 import { ms } from "./moyskald";
 
-const msProfit = async (momentFrom: string, momentTo: string) => {
-  const date = new Date();
-  const getYear = date.getFullYear();
-  const currentmonth = date.getMonth() + 1;
-  const nextmonthfirstday = new Date(getYear, 1, 1);
-
+const msProfit = async (
+  momentFrom: string,
+  momentTo: string,
+  month: string
+) => {
   const profitCollection = await ms.GET("report/profit/bycounterparty", {
     momentFrom,
     momentTo,
@@ -13,9 +12,11 @@ const msProfit = async (momentFrom: string, momentTo: string) => {
   const profit = profitCollection.rows.map((item: any) => {
     return {
       name: item.counterparty.name,
-      sum: item.sellSum / 100,
-      profit: item.profit,
-      margin: Math.round(item.margin * 10000) / 100,
+      [month]: {
+        sum: item.sellSum / 100,
+        profit: item.profit,
+        margin: Math.round(item.margin * 10000) / 100,
+      },
     };
   });
 

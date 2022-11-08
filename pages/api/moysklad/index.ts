@@ -23,12 +23,23 @@ export default async function handler(
 ) {
   try {
     const contragents = await msContragents();
-    const profit = await msProfit(getStartMonth(0), getEndMonth(0));
 
-    const data = mergeByProperty([contragents, profit], "name");
+    const months = [0, 1, 2, 3, 4, 5];
+    const profit = [];
+
+    for await (const iterator of months) {
+      const data = await msProfit(
+        getStartMonth(iterator),
+        getEndMonth(iterator),
+        `month${iterator}`
+      );
+      profit.push(...data);
+    }
+
+    const data = await mergeByProperty([contragents, profit], "name");
 
     const allSum = data.reduce((previousValue: number, currentValue: any) => {
-      return previousValue + currentValue.sum;
+      return previousValue + (currentValue?.month0?.sum || 0);
     }, 0);
 
     const totalSum = new Intl.NumberFormat("ru-RU").format(allSum);
