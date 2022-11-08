@@ -145,22 +145,30 @@ const TableProfit: FC<{ rows: IMoySklad[] }> = ({ rows }) => {
                     <TableRow hover tabIndex={-1} key={row.name}>
                       <TableCell scope="row">{row.name}</TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month5?.sum) || 0}
+                        {numberFormat(row.month5?.sum || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month4?.sum) || 0}
+                        {numberFormat(row.month4?.sum || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month3?.sum) || 0}
+                        {numberFormat(row.month3?.sum || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month2?.sum) || 0}
+                        {numberFormat(row.month2?.sum || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month1?.sum) || 0}
+                        {numberFormat(row.month1?.sum || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month0?.sum) || 0}
+                        <span
+                          className={`font-bold ${
+                            (row?.month1?.sum || 0) < row?.month0?.sum * 1.1
+                              ? "text-green-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          {numberFormat(row.month0?.sum || 0)}
+                        </span>
                       </TableCell>
                       <TableCell align="right">{row.month0?.margin}</TableCell>
                     </TableRow>

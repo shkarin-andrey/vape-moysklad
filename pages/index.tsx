@@ -5,10 +5,7 @@ import TableProfit from "../components/TableProfit";
 import { IMoySkladProps } from "../util/interfaces/moysklad.interface";
 
 const Home: FC = () => {
-  const [msData, setMsData] = useState<IMoySkladProps>({
-    data: [],
-    totalSum: 0,
-  });
+  const [msData, setMsData] = useState<IMoySkladProps | null>(null);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,7 +22,7 @@ const Home: FC = () => {
   return (
     <Layout>
       <div className="font-bold text-2xl mb-5">Прибыльность</div>
-      {msData.totalSum && !isLoading && (
+      {msData && msData.totalSum && !isLoading && (
         <div className="mb-5 flex item-center gap-3">
           <div className="text-xl text-gray-600 text-medium">
             В этом месяце продано на:
@@ -33,7 +30,7 @@ const Home: FC = () => {
           <div className="font-bold text-2xl">{msData.totalSum}₽</div>
         </div>
       )}
-      {msData.data && !isLoading ? (
+      {msData && msData.data && !isLoading ? (
         <TableProfit rows={msData.data} />
       ) : (
         <div className="flex justify-center items-center w-full">
