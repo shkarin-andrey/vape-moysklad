@@ -5,8 +5,8 @@ const msContragentsState = async (url: string) => {
     const profitCollection = await ms.GET(url);
 
     return profitCollection;
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error) {
+    throw new Error((error as Error).message);
   }
 };
 

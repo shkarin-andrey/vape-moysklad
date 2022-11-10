@@ -2,24 +2,22 @@ import { IMoySklad } from "./../../util/interfaces/moysklad.interface";
 import { Order } from "./TableProfit.interface";
 
 export const getColorStatus = (state: IMoySklad["stateName"]) => {
-  console.log(state);
-
-  switch (state.toLowerCase()) {
-    case "максим":
+  switch (state) {
+    case "Максим":
       return "bg-[#e68116]";
-    case "никитос":
+    case "Никитос":
       return "bg-[#a466bd]";
-    case "не берет":
+    case "НЕ БЕРЕТ":
       return "bg-[#00499a]";
-    case "старшина":
+    case "Старшина":
       return "bg-[#009fe3]";
-    case "поставщик":
+    case "Поставщик":
       return "bg-[#999999]";
-    case "вадим":
+    case "Вадим":
       return "bg-[#a2c617]";
-    case "розница":
+    case "РОЗНИЦА":
       return "bg-[#e92919]";
-    case "владик":
+    case "Владик":
       return "bg-[#8d1430]";
 
     default:
