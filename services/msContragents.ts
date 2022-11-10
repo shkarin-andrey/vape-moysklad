@@ -1,46 +1,36 @@
 import { ms } from "./moyskald";
+import msContragentsState from "./msContragentsState";
 
 const msContragents = async () => {
+  const contragents = [];
+
   const productsCollection = await ms.GET("entity/counterparty");
 
-  const contragents = await productsCollection.rows.map((item: any) => {
-    return {
+  for await (const item of productsCollection.rows) {
+    const contragentsState = await msContragentsState(item.state.meta.href);
+
+    contragents.push({
+      id: item.id,
       name: item.name,
       salesAmount: item.salesAmount,
       updated: item.updated,
       created: item.created,
-      month0: {
-        sum: 0,
-        profit: 0,
-        margin: 0,
-      },
-      month1: {
-        sum: 0,
-        profit: 0,
-        margin: 0,
-      },
-      month2: {
-        sum: 0,
-        profit: 0,
-        margin: 0,
-      },
-      month3: {
-        sum: 0,
-        profit: 0,
-        margin: 0,
-      },
-      month4: {
-        sum: 0,
-        profit: 0,
-        margin: 0,
-      },
-      month5: {
-        sum: 0,
-        profit: 0,
-        margin: 0,
-      },
-    };
-  });
+      stateColor: contragentsState.color,
+      stateName: contragentsState.name,
+      marginMonth0: 0,
+      marginMonth1: 0,
+      marginMonth2: 0,
+      marginMonth3: 0,
+      marginMonth4: 0,
+      marginMonth5: 0,
+      sumMonth0: 0,
+      sumMonth1: 0,
+      sumMonth2: 0,
+      sumMonth3: 0,
+      sumMonth4: 0,
+      sumMonth5: 0,
+    });
+  }
 
   return contragents;
 };

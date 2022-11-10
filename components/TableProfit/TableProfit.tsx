@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Box, Table, TableBody } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import TableCell from "@mui/material/TableCell";
@@ -144,33 +143,34 @@ const TableProfit: FC<{ rows: IMoySklad[] }> = ({ rows }) => {
                   return (
                     <TableRow hover tabIndex={-1} key={row.name}>
                       <TableCell scope="row">{row.name}</TableCell>
+                      <TableCell align="center">{row.stateName}</TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month5?.sum || 0)}
+                        {numberFormat(row.sumMonth5 || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month4?.sum || 0)}
+                        {numberFormat(row.sumMonth4 || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month3?.sum || 0)}
+                        {numberFormat(row.sumMonth3 || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month2?.sum || 0)}
+                        {numberFormat(row.sumMonth2 || 0)}
                       </TableCell>
                       <TableCell align="right">
-                        {numberFormat(row.month1?.sum || 0)}
+                        {numberFormat(row.sumMonth1 || 0)}
                       </TableCell>
                       <TableCell align="right">
                         <span
                           className={`font-bold ${
-                            (row?.month1?.sum || 0) < row?.month0?.sum * 1.1
+                            (row.sumMonth1 || 0) < row.sumMonth0 * 1.1
                               ? "text-green-500"
                               : "text-red-500"
                           }`}
                         >
-                          {numberFormat(row.month0?.sum || 0)}
+                          {numberFormat(row.sumMonth0 || 0)}
                         </span>
                       </TableCell>
-                      <TableCell align="right">{row.month0?.margin}</TableCell>
+                      <TableCell align="right">{row.marginMonth0}</TableCell>
                     </TableRow>
                   );
                 })}

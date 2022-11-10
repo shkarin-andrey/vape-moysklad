@@ -1,21 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { mergeByProperty } from "../../../services/mergeByProperty";
 import { getEndMonth, getStartMonth } from "../../../services/moment";
 import { msContragents, msProfit } from "../../../services/moyskald";
-
-const mergeByProperty = (arrays: any[], property: string) => {
-  const arr = arrays.flatMap((item) => item); //делаем из всех массивов - один
-
-  const obj = arr.reduce((acc, item) => {
-    return {
-      // делаем из массива - объект, чтобы повторения перезаписывались
-      ...acc,
-      [item[property]]: { ...acc[item[property]], ...item },
-    };
-  }, {});
-
-  return Object.values(obj); //обратно преобразуем из объекта в массив
-};
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,7 +18,8 @@ export default async function handler(
       const data = await msProfit(
         getStartMonth(iterator),
         getEndMonth(iterator),
-        `month${iterator}`
+        `sumMonth${iterator}`,
+        `marginMonth${iterator}`
       );
       profit.push(...data);
     }
@@ -39,7 +27,7 @@ export default async function handler(
     const data = await mergeByProperty([contragents, profit], "name");
 
     const allSum = data.reduce((previousValue: number, currentValue: any) => {
-      return previousValue + (currentValue?.month0?.sum || 0);
+      return previousValue + (currentValue.sumMonth0 || 0);
     }, 0);
 
     const totalSum = new Intl.NumberFormat("ru-RU").format(allSum);
