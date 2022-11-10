@@ -17,3 +17,13 @@ export type TMoySklad =
   | "sumMonth4"
   | "sumMonth5"
   | "marginMonth0";
+
+export interface EnhancedTableProps {
+  onRequestSort: (
+    event: React.MouseEvent<unknown>,
+    property: TMoySklad
+  ) => void;
+  order: Order;
+  orderBy: string;
+  rowCount: number;
+}

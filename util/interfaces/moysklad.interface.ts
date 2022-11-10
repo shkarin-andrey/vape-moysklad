@@ -4,7 +4,6 @@ export interface IMoySklad {
   salesAmount: number;
   updated: string;
   created: string;
-  stateColor: number;
   stateName: string;
   marginMonth0: number;
   marginMonth1: number;
