@@ -1,37 +1,24 @@
 import CircularProgress from "@mui/material/CircularProgress";
-import { FC, useEffect, useState } from "react";
+import axios from "axios";
+import { FC } from "react";
 import Layout from "../components/Layout";
 import TableProfit from "../components/TableProfit";
 import { IMoySkladProps } from "../util/interfaces/moysklad.interface";
 
-const Home: FC = () => {
-  const [msData, setMsData] = useState<IMoySkladProps | null>(null);
-  const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-
-    fetch("/api/moysklad")
-      .then((res) => res.json())
-      .then((data) => {
-        setMsData(data);
-        setLoading(false);
-      });
-  }, []);
-
+const Home: FC<IMoySkladProps> = ({ data, totalSum }) => {
   return (
     <Layout>
       <div className="font-bold text-2xl mb-5">Прибыльность</div>
-      {msData && msData.totalSum && !isLoading && (
+      {totalSum && (
         <div className="mb-5 flex item-center gap-3">
           <div className="text-xl text-gray-600 text-medium">
             В этом месяце продано на:
           </div>
-          <div className="font-bold text-2xl">{msData.totalSum}₽</div>
+          <div className="font-bold text-2xl">{totalSum}₽</div>
         </div>
       )}
-      {msData && msData.data && !isLoading ? (
-        <TableProfit rows={msData.data} />
+      {data ? (
+        <TableProfit rows={data} />
       ) : (
         <div className="flex justify-center items-center w-full">
           <CircularProgress />
@@ -39,6 +26,15 @@ const Home: FC = () => {
       )}
     </Layout>
   );
+};
+
+export const getServerSideProps = async () => {
+  const res = await axios.get(`${process.env.BASE_URL}/api/moysklad`);
+  const data = await res.data;
+
+  return {
+    props: { data: data.data, totalSum: data.totalSum },
+  };
 };
 
 export default Home;
