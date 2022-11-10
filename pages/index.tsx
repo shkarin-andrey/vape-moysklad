@@ -9,16 +9,17 @@ const Home: FC<IMoySkladProps> = ({ data, totalSum }) => {
   return (
     <Layout>
       <div className="font-bold text-2xl mb-5">Прибыльность</div>
-      {totalSum && (
-        <div className="mb-5 flex item-center gap-3">
-          <div className="text-xl text-gray-600 text-medium">
-            В этом месяце продано на:
+
+      {data && totalSum ? (
+        <>
+          <div className="mb-5 flex item-center gap-3">
+            <div className="text-xl text-gray-600 text-medium">
+              В этом месяце продано на:
+            </div>
+            <div className="font-bold text-2xl">{totalSum}₽</div>
           </div>
-          <div className="font-bold text-2xl">{totalSum}₽</div>
-        </div>
-      )}
-      {data ? (
-        <TableProfit rows={data} />
+          <TableProfit rows={data} />
+        </>
       ) : (
         <div className="flex justify-center items-center w-full">
           <CircularProgress />

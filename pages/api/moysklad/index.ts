@@ -33,7 +33,7 @@ export default async function handler(
     const totalSum = new Intl.NumberFormat("ru-RU").format(allSum);
 
     res.status(200).json({ data, totalSum });
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error) {
+    res.status(400).json({ message: (error as Error).message });
   }
 }
