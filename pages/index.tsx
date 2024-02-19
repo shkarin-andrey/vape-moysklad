@@ -1,5 +1,4 @@
 import CircularProgress from "@mui/material/CircularProgress";
-import axios from "axios";
 import { FC } from "react";
 import Layout from "../components/Layout";
 import TableProfit from "../components/TableProfit";
@@ -30,8 +29,8 @@ const Home: FC<IMoySkladProps> = ({ data, totalSum }) => {
 };
 
 export const getServerSideProps = async () => {
-  const res = await axios.get(`${process.env.BASE_URL}/api/moysklad`);
-  const data = await res.data;
+  const res = await fetch(`${process.env.BASE_URL}/api/moysklad`);
+  const data = await res.json();
 
   return {
     props: { data: data.data, totalSum: data.totalSum },
