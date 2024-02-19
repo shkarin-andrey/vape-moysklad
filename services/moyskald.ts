@@ -9,6 +9,7 @@ import msProfit from "./msProfit";
 const Moysklad = MoyskladCore.compose(MoyskladQueue);
 
 const ms = Moysklad({
+  endpoint: process.env.MOYSKLAD_URL,
   token: process.env.MOYSKLAD_TOKEN,
   apiVersion: "1.2",
   queue: true,
